@@ -4,9 +4,6 @@ import 'domain/entities/product.dart';
 import 'domain/usecases/auction_usecases.dart';
 
 void main() {
-  Buyer? winner;
-  Buyer? bestBuyerFromLoser;
-
   var product = Product(reservedPrice: 100);
   var buyers = [
     Buyer(bids: [110, 130], name: 'A'),
@@ -17,13 +14,11 @@ void main() {
   ];
 
   var auctionUseCase = AuctionUseCase();
-
   if (auctionUseCase.areThereValidBids(buyers, product)) {
-    winner = auctionUseCase.findHighestBid(buyers);
-    buyers.remove(winner);
-    bestBuyerFromLoser = auctionUseCase.findHighestBid(buyers);
-    print(
-        "The winner is ${winner.name} with this price: ${bestBuyerFromLoser.highestBid()}");
+    var winner = auctionUseCase.findHighestBidder(buyers);
+    var winningPrice =
+        auctionUseCase.findWinningPrice(buyers, product.reservedPrice, winner);
+    print("The winner is ${winner.name} with this price: $winningPrice");
   } else {
     print("There is no valid offer");
   }
